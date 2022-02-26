@@ -1,4 +1,5 @@
 using BankManagement.Middleware;
+using BankManagement.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.OData.Formatter;
@@ -6,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System.Linq;
+using Microsoft.EntityFrameworkCore;
 
 namespace BankManagement
 {
@@ -21,6 +23,9 @@ namespace BankManagement
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddScoped<DbContext, BankDBContext>();
+            services.AddScoped(typeof(IBankRepository<>), typeof(BankRepository<>));
+            services.AddDbContext<BankDBContext>(options => options.UseSqlServer("Server=LAPTOP-7JCNHQPO;Database=BankDB;Trusted_Connection=True;"));
             services.AddControllers();
             services.AddMvc(options =>
             {
