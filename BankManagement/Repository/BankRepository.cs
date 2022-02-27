@@ -1,4 +1,5 @@
-﻿using BankManagement.Models;
+﻿using BankManagement.Common;
+using BankManagement.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -22,11 +23,24 @@ namespace BankManagement.Repository
 
         public async Task<IQueryable<T>> GetItemsAsync(bool IsActive)
         {
+            var predicateCheck = GetIsActive("IsActive", IsActive);
 
-            IQueryable<T> result = await Task.Run(() => entities);
+            IQueryable<T> result = (IQueryable<T>)await Task.Run(() => entities.Where(predicateCheck));
             return result;
 
             //Where(s => s.GetType().GetProperty("IsActive").GetConstantValue().ToString() == IsActive.ToString())
+        }
+
+        private  Expression<Func<T, bool>> GetIsActive(string propertyToFilter, object value)
+        {
+            var className = Expression.Parameter(typeof(T));
+            var memberAccess = Expression.PropertyOrField(className, propertyToFilter);
+            var val = memberAccess.Type;
+            var exprRight = Expression.Constant(value,val);
+            var equalExpr = Expression.Equal(memberAccess, exprRight);
+            Expression<Func<T, bool>> lambda = Expression.Lambda<Func<T, bool>>(equalExpr, className);
+            return lambda;
+
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -17,5 +18,7 @@ namespace BankManagement.Common
             return assembly.GetTypes().
                 Where(t => string.Equals(t.Namespace,nameSpace, StringComparison.Ordinal)).ToArray();
         }
+
+       
     }
 }
