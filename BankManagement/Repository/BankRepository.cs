@@ -23,7 +23,7 @@ namespace BankManagement.Repository
 
         public async Task<IQueryable<T>> GetItemsAsync(bool IsActive)
         {
-            var predicateCheck = GetIsActive("IsActive", IsActive);
+            var predicateCheck = GetPredicate("IsActive", IsActive);
 
             IQueryable<T> result = (IQueryable<T>)await Task.Run(() => entities.Where(predicateCheck));
             return result;
@@ -31,7 +31,7 @@ namespace BankManagement.Repository
             //Where(s => s.GetType().GetProperty("IsActive").GetConstantValue().ToString() == IsActive.ToString())
         }
 
-        private  Expression<Func<T, bool>> GetIsActive(string propertyToFilter, object value)
+        private  Expression<Func<T, bool>> GetPredicate(string propertyToFilter, object value)
         {
             var className = Expression.Parameter(typeof(T));
             var memberAccess = Expression.PropertyOrField(className, propertyToFilter);
