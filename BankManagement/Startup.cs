@@ -25,7 +25,7 @@ namespace BankManagement
         {
             services.AddScoped<DbContext, BankDBContext>();
             services.AddScoped(typeof(IBankRepository<>), typeof(BankRepository<>));
-            services.AddDbContext<BankDBContext>(options => options.UseSqlServer("Server=LAPTOP-7JCNHQPO;Database=BankDB;Trusted_Connection=True;"));
+            services.AddDbContext<BankDBContext>(options => options.UseSqlServer("get settings for DB COnnection"));
             services.AddControllers();
             services.AddMvc(options =>
             {

@@ -28,15 +28,15 @@ namespace BankManagement.Repository
             IQueryable<T> result = (IQueryable<T>)await Task.Run(() => entities.Where(predicateCheck));
             return result;
 
-            //Where(s => s.GetType().GetProperty("IsActive").GetConstantValue().ToString() == IsActive.ToString())
+           
         }
 
         private  Expression<Func<T, bool>> GetPredicate(string propertyToFilter, object value)
         {
             var className = Expression.Parameter(typeof(T));
             var memberAccess = Expression.PropertyOrField(className, propertyToFilter);
-            var val = memberAccess.Type;
-            var exprRight = Expression.Constant(value,val);
+            var propertyType = memberAccess.Type;
+            var exprRight = Expression.Constant(value, propertyType);
             var equalExpr = Expression.Equal(memberAccess, exprRight);
             Expression<Func<T, bool>> lambda = Expression.Lambda<Func<T, bool>>(equalExpr, className);
             return lambda;
